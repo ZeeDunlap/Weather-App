@@ -1,4 +1,4 @@
-# Weather-App
+# Weather-App (AtmosAI)
 A weather app created using React JS and the Open Weather Map API
 
 Designed by Zee Dunlap and Andrew Foster
