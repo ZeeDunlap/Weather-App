@@ -1,0 +1,20 @@
+The system has three parts: frontend, backend, and cloud services.
+Their responsibilities are as follows:
+
+Frontend:
+Display data including current conditions, AI summary, Forecast, AQI, Location (REQ-1.1, REQ-1.2, REQ-2.1, REQ-2.2, REQ-3.1, REQ-3.2, REQ-8.1).
+Provide user interfaces for selecting a zip code, veiwing a weather map, and selecting units of measurement (REQ-4.1, REQ-5.1, REQ-6.1).
+Store user preferences for units of measurement and saved locations, and a cache of the last weather data obtained (REQ-6.2, REQ-7.2, REQ-9.1).
+Basic error handling including checking for an internet connection and validating that an entered zip code is five digits.
+
+Backend:
+Communicates between client device and cloud services
+Store API keys
+Handle more complex errors like request resend and timeout logic and errors thrown by cloud services such as invalid coordinates
+Maintain a shared cache that can be used by many users to reduce API requests.
+
+Cloud Services:
+OpenWeatherAPI servers which provide weather data 
+OpenAI API servers which provide LLM access
+
+Each use case (UC) should be at least one class to decouple the different components.

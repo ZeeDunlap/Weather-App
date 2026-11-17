@@ -1,0 +1,681 @@
+Software Requirements
+Specification
+for
+AtmosAI
+Prepared by Zee Dunlap and Andrew Foster
+Southeast Missouri University
+9/30/2026
+Software Requirements Specification for AtmosAI Page 1
+Table of Contents
+Table of Contents .......................................................................................................................... 1
+Revision History ...............................................................................................................................
+1
+1. Introduction
+................................................................................................................................2
+1.1 Purpose............................................................................................................................................. 2
+1.2 Document Conventions.................................................................................................................... 2
+1.3 Intended Audience and Reading Suggestions .................................................................................. 2
+1.4 Product Scope................................................................................................................................... 2
+1.5
+References............................................................................................................................................3
+2. Overall Description ..................................................................................................................3
+2.1 Product Perspective .......................................................................................................................... 3
+2.2 Product Functions............................................................................................................................. 3
+2.3 User Classes and Characteristics...................................................................................................... 4
+2.4 Operating Environment.................................................................................................................... 4
+2.5 Design and Implementation Constraints .......................................................................................... 4
+2.6 User Documentation......................................................................................................................... 5
+2.7 Assumptions and
+Dependencies...........................................................................................................5
+3. External Interface Requirements............................................................................................6
+3.1 User Interfaces ................................................................................................................................. 6
+3.2 Hardware Interfaces ......................................................................................................................... 6
+3.3 Software Interfaces........................................................................................................................... 6
+3.4 Communications Interfaces................................................................................................................
+7
+4. System Features........................................................................................................................8
+4.1 View Current Weather Conditions......................................................................................................
+8 4.2 View AI Summary and Suggestion
+…………................................................................................... 8
+4.3 View Forecast ......................................................................................................................................
+9
+4.4 Specify Zip Code ................................................................................................................................
+9
+4.5 View Radar Map ...............................................................................................................................
+10
+4.6 Change the Units of Measurement.....................................................................................................
+10
+4.7 Store Multiple Saved Locations.........................................................................................................
+11
+4.8 View Air Quality Index......................................................................................................................
+11
+4.9 Data Cache.........................................................................................................................................
+13
+Software Requirements Specification for AtmosAI Page 2
+4.10 Fifteen Minute Forecast For One Day.............................................................................................
+13
+4.11View Predicted Solar Energy Production..........................................................................................
+14
+5. Other Nonfunctional Requirements
+.......................................................................................13 5.1 Performance
+Requirements.............................................................................................................. 13 5.2 Safety
+Requirements......................................................................................................................... 14 5.3
+Security Requirements ..................................................................................................................... 14
+5.4 Software Quality Attributes..............................................................................................................
+14 5.5 Nonfunctional Requirements Summary
+........................................................................................... 14
+6. AI Transparency
+Disclosure.....................................................................................................16 Appendix A:
+Glossary...................................................................................................................15 Appendix
+B: Analysis Models......................................................................................................15
+Appendix C: Requirements Ellicitation
+Logs.............................................................................18
+Software Requirements Specification for AtmosAI Page 3
+1. Introduction
+1.1 Purpose
+The AtmosAI weather app will be built using React JS and the Open Weather Map API. The
+purpose of the application will be to allow the user to search for a location and see various
+weather conditions in the area. These weather conditions will include temperature, humidity,
+wind speed, weather descriptions, and forecast information. Amongst many more features, the
+one that stands out is the AI summary implementation. An example of this feature would be
+that if it is raining outside, the summary might say something like: “That rain is really coming
+down outside! You’ll probably want an umbrella and some rain boots if you decide to venture
+outside today!”
+1.2 Document Conventions
+This document follows the Software Requirements Specification (SRS) template of Karl Wiegers.
+Section headings use hierarchical numbering to organize the requirements and also make specific
+sections easy to reference. Unique requirement IDs are used to support traceability and show the
+functional requirements. Requirements are written in a way that is very clear and specific. Each
+feature has a priority level of high, medium, or low based on its importance and function.
+Technical terms and abbreviations are defined when necessary so maintain clarity throughout the
+document.
+1.3 Intended Audience and Reading Suggestions
+This SRS is intended for developers, testers, project members, and potential users of AtmosAI.
+Developers should use this document to understand core features of this application and expected
+behavior. Testers should use the functional and non-functional requirements to develop test cases
+for the application. Project team members should use the document to understand the project’s
+scope and development goals. Potential users can consult the introductory sections to understand
+the purpose and capabilities of AtmosAI.
+Readers should begin with the first 2 sections to understand the purpose, scope, and functionality
+of the program. Section 3 describes the external interfaces and integrations required for the
+application. Section 4 specifies the system’s features and functional requirements, and section 5
+describes its non-functional requirements. The appendices provide supporting information
+including analysis models.
+1.4 Product Scope
+AtmosAI is an AI-enhanced weather application that will provide users with
+up-to-date weather information and personalized summaries of weather conditions
+along with suggestions for the day. Users will be able to view current weather
+conditions, forecasts, weather maps, check air quality information, and manage saved
+locations. The goal of AtmosAI is to help users understand weather conditions more
+easily and make informed decisions about their daily activities. By combining
+traditional weather data with AI-generated explanations and recommendations, the
+Software Requirements Specification for AtmosAI Page 4
+application will make weather information more convenient and understandable.
+AtmosAI will rely on external weather and AI services to pull data from, and will
+focus mainly on being a convenient tool for everyday weather awareness and planning.
+1.5 References
+1. Wiegers, Karl. Software Requirements Specification (SRS) Template. Used as the structural reference for
+this document.
+2. OpenWeather. OpenWeather API Documentation. Documentation for retrieving weather information
+used by AtmosAI. Available at: https://openweathermap.org/api. Accessed October 12, 2026.
+3. OpenAI. OpenAI API Documentation. Documentation for integrating AI capabilities into AtmosAI,
+including generating weather summaries and suggested actions. Available at:
+https://platform.openai.com/docs. Accessed October 12, 2026.
+4. Dunlap, Zee, and Andrew Foster. AtmosAI Weather Application Project Repository. Source code and
+project files. GitHub: https://github.com/ZeeDunlap/Weather-App. Accessed October 12, 2026.
+2. Overall Description
+2.1 Product Perspective
+AtmosAI is a new and self-contained weather application developed as a software engineering
+project. It is designed to combine traditional weather data with AI to help users understand weather
+conditions and how these conditions should influence their daily activities. The application will use
+a React-based web interface so that users can search for locations and view weather conditions and
+forecasts. External sources will provide the primary weather data. OpenWeatherMap API will
+supply weather data and forecasts, while OpenAI API will generate the weather summaries.
+Atmos AI is not intended to replace existing weather data providers, but it is instead designed to
+serve as an interface that combines weather data with AI-generated explanations. Its functionality
+will depend on the availability and capabilities of the external APIs it uses
+2.2 Product Functions
+- Weather Information: Allow users to search for weather conditions by ZIP
+code and view current conditions including temperature, humidity, wind,
+precipitation probability, and a weather description. Provide a five-day
+forecast and short-term forecasts hourly.
+- AI-Powered Assistance: Generate daily weather summaries and suggested
+actions with artificial intelligence to help users understand the weather.
+- Location Management and Personalization: Allow users to save locations
+and change measurement units according to their preferences.
+- Environmental Information: Provide Air Quality Index (AQI) information
+to help users understand local air quality.
+- Weather Data Management: Cache weather information to improve
+accessibility, display the time the data was retrieved, and update cached
+weather data every two hours.
+Software Requirements Specification for AtmosAI Page 5
+2.3 User Classes and Characteristics
+- General Weather App Users: This is the primary user class for AtmosAI. These users access the
+application to check current weather conditions, view forecasts, and plan their days. This is the
+most important one to satisfy as AtmosAI is primarily intended to provide convenient weather
+information to the general public.
+- Frequent Planners and Travelers: This user class includes people who rely on weather information
+when planning trips, vacations, or work. Their needs emphasize convenient access to forecasts and
+weather information in different places, but are overall very similar to the general user.
+- Maintenance and Development Personnel: This class includes developers and maintainers
+responsible for troubleshooting and updating AtmosAI. They rely on the SRS to understand
+expected system behavior and maintain consistency as the application evolves.
+2.4 Constraints
+- Privacy and Data Handling: The application should limit the collection and storage of user data, but
+of course save what is necessary such as preferences and locations.
+- Hardware and Browser Compatibility: AtmosAI will operate as a web application and be usable on
+desktop and mobile browsers. Performance will depend on the user’s device capabilities and internet
+connection as well.
+- External API Dependencies: The application relies on the OpenWeatherMap API for weather
+information and the OpenAI API for AI-generated summaries and suggestions.
+- Concurrent Use: The application should accommodate multiple users accessing weather data at the
+same time without performance dips.
+- Error Logging and Troubleshooting: Application and API errors should be identifiable so developers
+can diagnose problems. The logs should not expose sensitive information.
+- User Controls: The interface must provide access to the application’s supported controls such as
+location, unit selection, and saved location management.
+- Programming Technologies: The application is developed using React and JavaScript.
+Implementation decisions must remain compatible with the project’s selected technologies and
+architecture.
+2.5 Operating Environment
+AtmosAI is a web-based application developed using React and JavaScript. It is intended to
+operate on desktop computers, laptops, and any device that has a modern web browser.
+Supporting operating systems include Windows, macOS, Android, and iOS, depending on
+browser compatibility.
+The application requires internet connectivity to retrieve weather information from the APIs.
+This means that it is externally reliant upon these services and the user’s network connection.
+Cached information may be available during connection interruptions depending on the
+application’s implementation. There will be no other application necessary besides a modern web
+browser.
+Software Requirements Specification for AtmosAI Page 6
+2.6 Design and Implementation Constraints
+- Development Technologies: The application uses React and JavaScript. New components and
+features must remain compatible with the existing application framework.
+- External API Integration: AtmosAI relies on the OpenWeatherMap API for weather data and the
+OpenAI API for AI-generated summaries and suggested actions. Developers must follow the
+API’s supported request formats and usage limits.
+- Network Communication: Retrieving current weather information and generating AI responses
+requires communication with external internet services. Network delays or service interruptions
+may affect the application.
+- Security and Credentials: API credentials must be handled securely and must not be exposed
+through publicly accessible client-side code. Server components must also protect user
+credentials.
+- Performance Requirements: The application should retrieve and display weather data.
+AI-generated content may also be affected by the external AI service.
+- Data Storage: The caching and saved-location functionality must be compatible with the browser
+environment.
+- Development and Maintenance: Implementation decisions should remain consistent with the
+team’s existing codebase and coding practices.
+2.7 User Documentation
+AtmosAI will include concise digital user documentation to help users understand how to search
+for weather information. Basic troubleshooting guidance for common issues may be included as
+well.
+2.8 Assumptions and Dependencies
+- Internet Connectivity: User’s personal network connections limit their access to the features
+of the program.
+- Weather Data Provider: AtmosAI depends on the OpenWeatherMap API to provide the
+weather conditions and forecasts.
+- AI Service Provider: AtmosAI depends on the OpenAI API to generate weather summaries
+and suggested actions.
+- API Credential and Usage Limits: The project assumes that valid credentials and sufficient
+API usage allowances will be available throughout development and operation.
+- Browser Support: Users access AtmosAI through a modern web browser that supports the
+application’s technologies.
+- Weather Data Accuracy: AtmosAI relies on information supplied by its external weather
+provider. Accuracy is not guaranteed as a result of this.
+- Cached Information: When weather data is cached, users are assumed to understand that the
+information may not reflect current conditions, but will display accurate information as it
+updates periodically.
+Software Requirements Specification for AtmosAI Page 7
+3. External Interface Requirements
+3.1 User Interfaces
+AtmosAI will provide a web-based graphical user interface that allows users to access weather
+information and application features through a modern web browser. The interface will have a clear
+layout with readable text and straightforward navigation. The main weather screen will display the
+selected location, current weather conditions, and access to the forecast and AI-generated daily
+summary. Current conditions will include information such as temperature, humidity, wind,
+precipitation probability, and a weather description. Users will enter a zip code to search for weather
+information and to see a five-day forecast. It will provide adaptable information screen layouts
+depending upon the device.
+3.2 Hardware Interfaces
+AtmosAI is a web-based application intended to operate on desktop computers, laptops,
+smartphones, or anything that has a modern web browser. No specialized hardware is required.
+Standard input devices such as keyboards and mice will be required for normal user interaction.
+Wi-fi connection is required, and secure network communication through HTTPS is needed as
+well.
+3.3 Software Interfaces
+- React and JavaScript: AtmosAI uses React and JavaScript to implement its
+web interface and interactive features. These technologies support input,
+navigation, and display of weather information, forecasts, maps, and the
+AI-generated summaries.
+- OpenWeatherMap API: AtmosAI will communicate with the
+OpenWeatherMap API to retrieve weather information and forecasts. The
+application will process and display the returned data to users. API details are
+available at https://openweathermap.org/api.
+- OpenAI API: AtmosAI will use the OpenAI API to generate daily weather
+summaries and suggested actions. Relevant weather information will be sent to
+the service and receive text in response. This functionality depends on valid
+API credentials, network connectivity, and the availability of the external
+service. API details are available at https://platform.openai.com/docs.
+- Web Browser: AtmosAI will operate within a compatible web browser, which
+will render the React interface, process user interactions, and support
+communication with external services.
+- Data Storage: AtmosAI will need to store saved locations, cached information,
+and user preferences. Stored information will be used to retrieve saved
+locations and display previously retrieved weather data when appropriate.
+Software Requirements Specification for AtmosAI Page 8
+3.4 Communications Interfaces
+- Weather Data Communication: AtmosAI will send requests to the OpenWeatherMap API
+containing the location information needed to retrieve weather conditions and forecasts.
+This will return weather data in the format specified by the API.
+- AI Service Communication: AtmosAI will communicate with the OpenAI API to generate
+daily weather summaries and suggested actions. The service will return generated text for
+display within the application.
+- Communication Security: API credentials must be handled securely and protected from
+unauthorized access. Secret API keys won’t be publicly available and will ensure security
+for the users.
+3.5 Operations
+AtmosAI will primarily operate through interactive sessions in a web browser. Users
+search for weather information by ZIP code, select saved locations, view forecasts, and
+access AI-generated summaries and suggested actions. During normal operation, the
+application will retrieve weather information from the OpenWeatherMap API and use
+the OpenAI API to generate summaries when requested or as specified. Weather
+information may be cached and refreshed every two hours, and the retrieval time will
+be displayed for the users. Error messages will be shown if network connectivity errors
+occur. Backup and recovery procedures will depend on the application’s data storage
+method. Ongoing maintenance is required, and updating API integrations may be
+necessary depending on potential API providers.
+3.6 Functional Hierarchy
+AtmosAI's functionality can be organized into five major groups: weather information, AI weather
+assistance, weather visualization and environmental data, location and display preferences, and weather
+data management.
+1. Weather Information
+- Search for weather information by ZIP code.
+- View current weather conditions.
+- View five-day forecasts.
+- View short-term forecasts in 15-minute increments for the next three hours.
+2. AI Weather Assistance
+- Generate daily weather summaries.
+- Provide suggested actions based on available weather information.
+3. Weather Visualization and Environmental Data
+- Display weather maps.
+Software Requirements Specification for AtmosAI Page 9
+- View map layers for precipitation, temperature, cloud cover, and wind.
+- View Air Quality Index information.
+4. Location and Display Preferences
+- Save and select up to five locations.
+- Change measurement units.
+5. Weather Data Management
+- Retrieve weather data from the external weather service.
+- Cache weather information.
+- Display the time weather data was retrieved.
+- Refresh cached weather data every two hours.
+These functional groups provide a high-level overview of how AtmosAI's capabilities are organized.
+Detailed requirements for individual functions are specified in the functional requirements section of
+this SRS.
+4. System Features
+4.1 View Current Weather Conditions (UC-1)
+4.1.1 Description and priority
+The user will be able to view the current weather conditions such as temperature, wind
+speed and direction, and chance of precipitation. This feature is a high priority. This
+requirement was derived from user story 2.
+4.1.2 Stimulus/Response Sequences
+The current weather conditions should load when the user launches the app. The app
+will retrieve and display the weather data for the last used zip code.
+4.1.3 Functional Requirements
+● REQ-1.1: The app shall display weather for the location provided
+● REQ-1.2: The app shall display temperature, wind speed and direction, and chance of
+precipitation.
+● REQ-1.3: The user shall be alerted if weather data can not be accessed due to not
+having an internet connection
+● REQ-1.4: If the API server does not respond within three attempts, the app will display
+an error
+4.2 View AI Summary and Suggestion (UC-2)
+4.2.1 Description and priority
+The user will be able to view an AI generated summary of the day’s weather. The summary
+will also include a suggested action, such as bringing an umbrella because it is raining.
+This is a high priority. This requirement was derived from ethnography.
+4.2.2 Stimulus/Response Sequences
+The AI summary should be generated when the user opens the app after the weather
+Software Requirements Specification for AtmosAI Page 10
+data has been obtained. The app will use the obtained weather data to prompt an
+openAI server to generate a summary.
+4.2.3 Functional Requirements
+● REQ-2.1: The app shall display an AI generated summary of the weather data retrieved from
+UC-1
+● REQ-2.2: The app will provide an AI generated suggested action based on the summary (e.g. if
+it is raining, it may suggest to bring an umbrella)
+● REQ-2.3: The user shall be alerted if the summary can not be generated due to not having an
+internet connection
+● REQ-2.4: If the API server does not respond within three attempts, the app will display
+an error
+4.3 View Forecast (UC-3)
+4.3.1 Description and priority
+The user will be able to view a five day forecast. This feature is a high priority. This
+requirement was derived from user story 5.
+4.3.2 Stimulus/Response Sequences
+The forecast should load when the user launches the app. The app will retrieve and display
+the forecast data for the last used zip code.
+4.3.3 Functional Requirements
+● REQ-3.1: The app shall display the weather forecast for the next five days
+● REQ-3.2: The app shall display temperature, wind speed and direction, and chance of
+precipitation for each day.
+● REQ-3.3: The user shall be alerted if the forecast can not be generated due to not having an
+internet connection
+● REQ-3.4: If the API server does not respond within three attempts, the app will display
+an error
+4.4 Specify Zip Code (UC-4)
+4.4.1 Description and priority
+The user will be able to set a specific zip code. The weather data will be retrieved for
+the specified zip code. This is a high priority. This requirement was derived from
+ethnography.
+4.4.2 Stimulus/Response Sequences
+There will be a text box that allows the user to input a zip code. When the user presses
+“enter” the weather data for the new zip code will be retrieved. The AI summary will
+change to reflect the new weather data.
+4.4.3 Functional Requirements
+● REQ-4.1: The user shall be able to specify a location that they would like to see weather
+● REQ-4.2: When the location is changed, all weather data will be fetched for the new
+Software Requirements Specification for AtmosAI Page 11
+location
+● REQ-4.3: AI generated content will be regenerated using the new weather data
+● REQ-4.4: If the app is not connected to the internet it will display a no internet
+connection error
+● REQ-4.5 If the user enters a ZIP code that is not 5 digits the app will display an error
+and the user will be asked to reenter the ZIP code
+● REQ-4.6: If the API request times out three times the app will display an error saying
+the server can not be reached
+● REQ-4.7: The user will be informed if the ZIP code is invalid
+4.5 View Radar Map (UC-5)
+4.5.1 Description and priority
+The user should be able to view a weather map. The map can show data including
+precipitation, temperature, cloud cover, and wind. This is a medium priority. This
+requirement was derived from ethnography.
+4.5.2 Stimulus/Response Sequences
+The user will press a button to view the weather map. The app will retrieve and display the
+weather map for the last used zip code.
+4.5.3 Functional Requirements
+● REQ-5.1: The user shall be able to view a weather map of a specified area
+● REQ-5.2: The map will be able to display precipitation, cloud cover, pressure, temperature, and
+wind speed and direction
+● REQ-5.3: The user shall be alerted if the map can not be generated due to not having an internet
+connection
+● REQ-5.4: If the API server does not respond within three attempts, the app will display
+an error
+4.6 Change the Units of Measurement (UC-6)
+4.6.1 Description and priority
+The user will be able to choose between displaying measurements in standard (SI),
+metric or imperial units. This is a medium priority. This requirement was derived from
+ethnography.
+4.6.2 Stimulus/Response Sequences
+The user will use a dropdown menu to select a different unit of measurement. The
+weather data will update with the new units.
+4.6.3 Functional Requirements
+● REQ-6.1: The user shall be able to choose between metric, imperial, and SI units
+● REQ-6.2: The user’s choice of units will be saved, so that the next time the app is launched it
+will display the data in the chosen units
+● REQ-6.3: When the preferred units have been changed, the app will attempt to refresh the
+weather data and AI generated content.
+Software Requirements Specification for AtmosAI Page 12
+4.7 Store Multiple Saved Locations (UC-7)
+4.7.1 Description and priority
+After entering a valid zip code, the user will have the option to save the location for
+easy access. The user will be able to save up to five locations. This is a medium priority.
+This requirement was derived from interviewing.
+4.7.2 Stimulus/Response Sequences
+After validating a zip code, a button will appear which says “save location”. Saved
+locations will be stored at the top of the screen. The user will be able to quickly switch
+to another location by clicking it.
+4.7.3 Functional Requirements
+● REQ-7.1: The user shall be able to save a location for quick access in the future
+● REQ-7.2: The user will be able to save up to five locations
+● REQ-7.3: If the user attempts to save more than five locations, they will informed that
+only five locations can be saved and prompted to delete a location
+4.8 View Air Quality Index (UC-8)
+4.8.1 Description and priority
+The current air quality index (AQI) will be displayed with current weather conditions.
+This is a medium priority. This requirement was derived from user story 6.
+4.8.2 Stimulus/Response Sequences
+The AQI should load when the user launches the app. The app will retrieve and display the
+AQI data for the last used zip code.
+4.8.3 Functional Requirements
+● REQ-8.1: The app shall display the air quality index with the current weather conditions
+● REQ-8.2: The user shall be alerted if AQI data can not be accessed due to not having an
+internet connection
+● REQ-8.3: If the API server does not respond within three attempts, the app will display
+an error
+4.9 Data Cache (UC-9)
+4.9.1 Description and priority
+The app will cache retrieved weather data. Before fetching data, the app will check if it
+is cached. If it is, the app will use the cached data instead of sending another API
+Software Requirements Specification for AtmosAI Page 13
+request. The time that the data was retrieved will be displayed along with the weather
+data. This is a medium priority. This requirement was derived from ethnography.
+4.9.2 Stimulus/Response Sequences
+Whenever data is retrieved, it will be cached. The cached data will be replaced with
+new data every two hours when the data is updated.
+4.9.3 Functional Requirements
+● REQ-9.1: When weather data or AI generated content is fetched, it will be cached
+locally and replace existing cached data
+● REQ-9.2: When the app is launched it will check for cached data that is less than two
+hours old and display it if available
+● REQ-9.3: The time that data was retrieved will be displayed with the data
+4.10 Fifteen Minute Forecast For One Day (UC-10)
+4.10.1 Description and priority
+The app will display the forecasted weather conditions in 15 minute increments for the
+next three hours. This is a low priority. This requirement was derived from interviewing.
+4.10.2 Stimulus/Response Sequences
+The forecasted conditions will be displayed after the user launches the app. The data
+will be for the last used zip code. The forecast will appear under the current weather
+conditions.
+4.10.3 Functional Requirements
+● REQ-10.1: The app shall display a three day forecast with 15 minute increments for the location
+provided
+● REQ-10.2: The app shall display temperature, wind speed and direction, and chance of
+precipitation for each increment
+● REQ-10.3: The user shall be alerted if the forecast can not be generated due to not having an
+internet connection
+● REQ-10.4: If the API server does not respond within three attempts, the app will display
+an error
+4.11 View Predicted Solar Energy Production (UC-11)
+Software Requirements Specification for AtmosAI Page 14
+4.11.1 Description and priority
+The user will be able to view the estimated efficiency of solar panels for the day. This is
+a low priority. This requirement was derived from ethnography
+4.11.2 Stimulus/Response Sequences
+The user will press a button to view the predicted solar energy production. The app will
+retrieve and display the solar energy production data for the last used zip code.
+4.11.3 Functional Requirements
+● REQ-11.1: The user will be able to view the estimated energy that can be generated by solar
+panels for the day at the specified location
+● REQ-11.2: The user shall be alerted if the estimate can not be generated due to not having an
+internet connection
+● REQ-11.3: If the API server does not respond within three attempts, the app will display
+an error
+5. Other Nonfunctional Requirements
+5.1 Performance Requirements
+The app should not have excessively long load times. Specifically:
+● The weather conditions should be displayed within two seconds of the app being launched
+● The weather forecast should be displayed within three seconds of the app being launched
+● The AI summary should be displayed within ten seconds of the app being launched. This will
+provide time for the weather data to be returned and for the server to generate a response.
+When reloading due to a new zip code being searched, or the preferred units of measurement being
+changed, the features should load in the same times listed above. In cases of weak network connection or
+congestion, these times can be increased by five seconds. Cached data should be used when possible to
+minimize loading times. This requirement was derived from user stories.
+5.2 Safety Requirements
+The app must provide accurate weather data. Providing inaccurate weather data could cause users to
+prepare incorrectly for potentially dangerous or destructive weather events. To ensure that the app provides
+accurate information, the data displayed must be checked to ensure that it matches what is returned from
+the weather API. When a user enters a zip code the app must return the correct weather for that area. The
+app must clearly display the current location that the weather data is for to help prevent confusion about
+what location the user is viewing. This requirement was derived from user stories.
+The app must provide up-to-date weather data. Data that is not up-to-date would be inaccurate and have the
+same repercussions as providing inaccurate data. The weather data will be updated at least as often as the
+Software Requirements Specification for AtmosAI Page 15
+API server (every two hours) to ensure that it is up to date. This requirement was derived from user stories.
+5.3 Security Requirements
+The zip code will be stored securely on the user’s device. It should not be possible to retrieve this data
+without physical access to the user’s device. This requirement was derived from ethnography.
+5.4 Software Quality Attributes
+Correctness is the top priority for this app. As discussed in section 5.2, incorrect weather data can be a safety
+risk. Additionally, the AI summary should be tested to ensure that it produces accurate information. The AI
+model may need to have restricted access to information to ensure that it produces a correct summary and
+does not make something up or use data for another time and/or place. This requirement was derived from
+user stories.
+Other top priorities are usability, availability, reliability, and portability. The app should be easy to use,
+provide the data quickly and consistently when the user has internet access, and the weather app should be
+able to run on many different devices. These requirements were derived from ethnography.
+5.5 Nonfunctional Requirements Summary
+● NFR-1: Performant: load times will be within the restraints set in section 5.1
+● NFR-2: Correct: the app will provide data that is accurate and no more than two hours old for the zip
+code entered
+● NFR-3: Secure: the saved location data will be stored locally. It will be impossible to retrieve this data
+remotely
+● NFR-4: Usable: even if someone has never used the app before, they should be able to find the
+information they are looking for within two minutes
+● NFR-5: Available: the features will work as in intended as long as their requirements are met, with an
+uptime within 2% of the 95% uptime of the weather API servers
+● NFR-6: Reliable: the app will not cause an error when all requirements are met
+● NFR-7: Portable: the app can run on mobile devices as well as PCs
+6. AI Transparency Disclosure
+● Requirements elicitation was done with an hybrid approach. Because this project has no
+specific stakeholder, AI was used as a stand-in to represent specific stakeholders as well as an
+alternative to sending surveys and waiting for responses. The AI output was reviewed to ensure
+that it did not contain errors and aligned with the intent of the software. Prompt engineering
+strategies were used to help the AI generate accurate and useful information.
+● All functional and non-functional requirements were derived from the requirements elicitation
+using human judgment. AI was not used to brainstorm, draft, or reword the requirements (H)
+● All diagrams were derived from requirements using human judgment. AI was not used to
+brainstorm or generate code. (H)
+Appendix A: Glossary
+AtmosAI or “the app”: AtmosAI is the web-based weather app described by this software requirements
+Software Requirements Specification for AtmosAI Page 16
+specification document
+API: API stands for “Application Programming Interface”. This is how AtmosAI communicates with other
+software, including Open Weather and OpenAI
+Appendix B: Analysis Models
+Functional Requirement 4.1: View Current Weather Conditions
+Condition Action
+The device has cached data for the request
+that is < two hours old
+Display the cached data and the time it was cached
+The device has no internet access Display no internet access error
+The device gets no response from server Retry up to three times
+The server fails to respond three times Display server inaccessible error
+Device has internet access, server responds with
+“OK”
+Display the obtained weather data in the user
+specified units of measurement. Cache the data
+Functional Requirement 4.3: View Forecast
+Condition Action
+The device has cached data for the request
+that is < two hours old
+Display the cached data and the time it was cached
+The device has no internet access Display no internet access error
+The device gets no response from server Retry up to three times
+The server fails to respond three times Display server inaccessible error
+Device has internet access, server responds with
+“OK”
+Display the obtained forecast data in the user
+specified units of measurement. Cache the data.
+Functional Requirement 4.4: Specify Zip Code
+Condition Action
+The device has no internet access Display no internet access error
+The device gets no response from server Retry up to three times
+The server fails to respond three times Display server inaccessible error
+Device has internet access, server responds with Check if the zip code entered by the user is valid
+Software Requirements Specification for AtmosAI Page 17
+Functional Requirement 4.4: Specify Zip Code
+“OK”
+User entered invalid zip code Display invalid zip code error
+A valid zip code has been entered Update the weather conditions, forecast, and AI
+summary to match the weather of the new location
+Functional Requirement 4.5: View Radar Map
+Condition Action
+The device has no internet access Display no internet access error
+The device gets no response from server Retry up to three times
+The server fails to respond three times Display server inaccessible error
+Device has internet access, server responds with
+“OK”
+Display the obtained weather map
+Functional Requirement 4.2: View AI Summary and Suggestion
+Functional Requirement 4.6: Change Units of Measurement
+Software Requirements Specification for AtmosAI Page 18
+Functional Requirement 4.7: Store Multiple Saved Locations
+Functional Requirement 4.8: View Air Quality Index
+Software Requirements Specification for AtmosAI Page 19
+Appendix C: Requirements Ellicitation Logs
+Zero-Shot Prompt
+● As a maintenance engineer, what are some requirements you have for a weather app?
+○ As a maintenance engineer, I need the weather app to use reliable, well‑documented, and
+modular data systems so that I can quickly diagnose issues, apply fixes without breaking other
+features, and ensure the app stays accurate and stable during updates.
+Few-Shot Prompt
+● Now I need you to give the user story from the perspective of a customer. Some examples include "As a
+college student, I want to be able to view the weather at a glance so that I can be prepared for my
+commute around campus. " or "since the weather where I live often changes without warning, I need a
+weather app that shows the most up-to-date weather data so that severe weather does not catch me off
+guard"
+○ As a busy parent, I want to see the day’s weather at a glance so I can plan school drop‑offs and
+outdoor activities without surprises.
+○ As a runner, I want hourly forecasts so I can choose the best time for my workout.
+○ As a traveler, I need accurate weather for multiple saved locations so I can prepare for trips
+ahead of time.
+○ As an outdoor worker, I need reliable precipitation and wind forecasts so I can plan my tasks
+Software Requirements Specification for AtmosAI Page 20
+safely.
+○ s a person with allergies, I want pollen and air quality data so I can manage my symptoms
+throughout the day
+Chain-of-Thought prompt
+● Now I am going to interview you. answer the questions from the perspective of a college student. walk
+me through your thought process when you answer. First question: as a college student, what do you
+think is the most important feature of a weather app?
+○ As a college student, the most important feature of a weather app is being able to see accurate,
+up‑to‑date weather at a glance.
+○ 1. My day is chopped into small chunks.
+■ Classes, walking across campus, grabbing food, study sessions — everything is in short
+bursts. I don’t have time to dig through menus or interpret complicated charts. So I
+immediately think: I need something fast and clear.
+○ 2. Weather affects almost every transition.
+■ If it’s raining, I need my jacket. If it’s hot, I need water. If it’s freezing, I need gloves.
+So the app has to tell me the essentials instantly:
+● current temp
+● precipitation
+● “feels like”
+● any sudden changes coming soon
+○ 3. College schedules change constantly.
+■ Sometimes I’m running late or switching buildings. I don’t want to get caught in a
+surprise downpour between classes. That makes real‑time updates and quick alerts
+extremely important.
+○ 4. I’m usually multitasking.
+■ I’m checking the weather while walking, talking, or rushing. So the app needs to be
+simple, readable, and fast.
+● What are some features that existing weather apps do poorly, or even features that they are missing
+entirely?
+○ When I think about weather apps I’ve used — Apple Weather, Weather Channel, AccuWeather,
+etc. — a few frustrations immediately come to mind. I’m usually checking the weather while
+rushing between classes, so anything slow, cluttered, or unclear stands out fast.
+1. Too Much Clutter on the Home Screen: I just want to know if I need a jacket before I sprint
+across campus. Many apps bury the basics under ads, long scrolls, or random content like
+“weather news” or “videos.” It slows me down.
+2. Slow or Unreliable Real‑Time Updates: Weather on campus changes fast. I’ve had apps show
+“clear skies” while it’s literally raining outside. Some apps refresh too slowly or don’t warn me
+about sudden changes.
+3. Poor Short‑Range Forecasting: I care more about the next hour than the next week. Many apps
+focus on 7‑day forecasts but give vague or inaccurate minute‑by‑minute predictions.
+4. Bad Notification Logic: Sometimes I get spammy alerts (“Rain expected tonight”) that aren’t
+useful. Other times, I get no alert when a storm rolls in while I’m walking to class.
+5. No Context for Students: College life is unique — lots of walking, lots of sudden schedule
+changes. Weather apps don’t consider that.
+Software Requirements Specification for AtmosAI Page 21
+6. “Feels Like” Isn’t Accurate Enough: Wind tunnels between buildings make campus feel way
+colder than the official temperature. Apps rarely capture microclimates.
+7. Poor Multi‑Location Handling: Switching between locations is clunky in many apps.
+8. Missing Air Quality & Allergy Info: A lot of students deal with allergies or asthma. Many apps
+hide AQI or pollen data behind menus.
+Validation
+● There were no errors found in the AI output and the output aligns with the stakeholder intent. Some
+portions of the conversation were edited to make them clearer and more concise. Some user stories were
+not included in this document because they only provided requirements that already existed from other
+user stories.
