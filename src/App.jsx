@@ -12,6 +12,7 @@ import { summarizeFiveDays } from "./services/forecast.js";
 import MapView from "./MapView.jsx";
 import { getUnitDetails, UNIT_OPTIONS } from "./services/units.js";
 import { addSavedLocation, readSavedLocations, removeSavedLocation } from "./services/savedLocations.js";
+import openWeatherLogo from "./assets/openweather-logo.png";
 
 const LAST_ZIP_KEY = "atmosai-last-zip";
 const SAVED_UNITS_KEY = "atmosai-units";
@@ -367,6 +368,10 @@ function App() {
         )}
         {weather && <MapView location={weather.location} />}
       </section>
+      <footer className="attribution">
+        <img src={openWeatherLogo} alt="OpenWeather" />
+        <a href="https://openweathermap.org/">Weather data provided by OpenWeather</a>
+      </footer>
     </main>
   );
 }
