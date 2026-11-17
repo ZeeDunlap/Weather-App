@@ -1,0 +1,19 @@
+{
+  "name": "atmosai-weather-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node src/dev.js",
+    "server": "node src/server/index.js",
+    "build": "vite build",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "vite": "^6.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "leaflet": "^1.9.4"
+  }
+}
