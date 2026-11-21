@@ -1,5 +1,4 @@
-import test from "node:test";
-import assert from "node:assert/strict";
+import { expect, test } from "@jest/globals";
 import { createWeatherApi } from "../src/server/weatherApi.js";
 
 test("retrieves and categorizes air quality for the selected ZIP code", async () => {
@@ -20,7 +19,7 @@ test("retrieves and categorizes air quality for the selected ZIP code", async ()
 
   const result = await api.getAirQuality("63701");
 
-  assert.equal(result.index, 3);
-  assert.equal(result.category, "Moderate");
-  assert.equal(result.pollutants.pm2_5, 12.4);
+  expect(result.index).toBe(3);
+  expect(result.category).toBe("Moderate");
+  expect(result.pollutants.pm2_5).toBe(12.4);
 });

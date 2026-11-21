@@ -1,5 +1,4 @@
-import test from "node:test";
-import assert from "node:assert/strict";
+import { expect, test } from "@jest/globals";
 import { summarizeFiveDays } from "../src/services/forecast.js";
 
 test("groups forecast samples into five days with daily temperature, wind, and rain", () => {
@@ -16,9 +15,9 @@ test("groups forecast samples into five days with daily temperature, wind, and r
 
   const daily = summarizeFiveDays(samples);
 
-  assert.equal(daily.length, 5);
-  assert.equal(daily[0].min, 8);
-  assert.equal(daily[0].max, 16);
-  assert.equal(daily[0].windDirection, "E");
-  assert.equal(daily[0].precipitationChance, 30);
+  expect(daily).toHaveLength(5);
+  expect(daily[0].min).toBe(8);
+  expect(daily[0].max).toBe(16);
+  expect(daily[0].windDirection).toBe("E");
+  expect(daily[0].precipitationChance).toBe(30);
 });

@@ -1,5 +1,4 @@
-import test from "node:test";
-import assert from "node:assert/strict";
+import { expect, test } from "@jest/globals";
 import { createWeatherApi, WeatherApiError } from "../src/server/weatherApi.js";
 
 test("proxies supported weather map tiles while keeping the API key server-side", async () => {
@@ -18,16 +17,16 @@ test("proxies supported weather map tiles while keeping the API key server-side"
 
   const tile = await api.getMapTile("precipitation_new", 4, 3, 5);
 
-  assert.equal(requestedUrl.hostname, "tile.openweathermap.org");
-  assert.equal(requestedUrl.pathname, "/map/precipitation_new/4/3/5.png");
-  assert.equal(requestedUrl.searchParams.get("appid"), "private-test-key");
-  assert.equal(tile.contentType, "image/png");
-  assert.deepEqual([...tile.body], [1, 2, 3]);
+  expect(requestedUrl.hostname).toBe("tile.openweathermap.org");
+  expect(requestedUrl.pathname).toBe("/map/precipitation_new/4/3/5.png");
+  expect(requestedUrl.searchParams.get("appid")).toBe("private-test-key");
+  expect(tile.contentType).toBe("image/png");
+  expect([...tile.body]).toEqual([1, 2, 3]);
 });
 
 test("rejects unsupported layers and out-of-range map coordinates", async () => {
   const api = createWeatherApi({ apiKey: "test-key" });
 
-  await assert.rejects(api.getMapTile("unknown", 2, 1, 1), WeatherApiError);
-  await assert.rejects(api.getMapTile("temp_new", 2, 4, 0), /invalid/);
+  await expect(api.getMapTile("unknown", 2, 1, 1)).rejects.toBeInstanceOf(WeatherApiError);
+  await expect(api.getMapTile("temp_new", 2, 4, 0)).rejects.toThrow(/invalid/);
 });

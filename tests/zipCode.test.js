@@ -1,5 +1,4 @@
-import test from "node:test";
-import assert from "node:assert/strict";
+import { expect, test } from "@jest/globals";
 import { createWeatherApi, WeatherApiError } from "../src/server/weatherApi.js";
 
 test("reports an invalid ZIP code returned by the geocoding service", async () => {
@@ -12,10 +11,11 @@ test("reports an invalid ZIP code returned by the geocoding service", async () =
     }),
   });
 
-  await assert.rejects(
-    api.getWeather("99999"),
-    (error) => error instanceof WeatherApiError
-      && error.status === 400
-      && /Check the ZIP code/.test(error.message),
-  );
+  const error = await api.getWeather("99999").catch((rejection) => rejection);
+
+  expect(error).toBeInstanceOf(WeatherApiError);
+  expect(error).toMatchObject({
+    status: 400,
+    message: expect.stringMatching(/Check the ZIP code/),
+  });
 });

@@ -1,5 +1,4 @@
-import test from "node:test";
-import assert from "node:assert/strict";
+import { expect, test } from "@jest/globals";
 import { createWeatherApi, WeatherApiError } from "../src/server/weatherApi.js";
 
 function response(data, status = 200) {
@@ -29,12 +28,12 @@ test("loads current conditions and derives precipitation chance from the next fo
 
   const weather = await api.getWeather("63701", "metric");
 
-  assert.equal(weather.location.name, "Cape Girardeau");
-  assert.equal(weather.current.temperature, 20.2);
-  assert.equal(weather.current.windDirection, "E");
-  assert.equal(weather.current.precipitationChance, 42);
-  assert.equal(requestedUrls.length, 3);
-  assert.ok(requestedUrls.every((url) => url.searchParams.get("appid") === "test-key"));
+  expect(weather.location.name).toBe("Cape Girardeau");
+  expect(weather.current.temperature).toBe(20.2);
+  expect(weather.current.windDirection).toBe("E");
+  expect(weather.current.precipitationChance).toBe(42);
+  expect(requestedUrls).toHaveLength(3);
+  expect(requestedUrls.every((url) => url.searchParams.get("appid") === "test-key")).toBe(true);
 });
 
 test("rejects malformed ZIP codes without calling the provider", async () => {
@@ -44,8 +43,8 @@ test("rejects malformed ZIP codes without calling the provider", async () => {
     fetchImpl: async () => { called = true; },
   });
 
-  await assert.rejects(api.getWeather("1234"), WeatherApiError);
-  assert.equal(called, false);
+  await expect(api.getWeather("1234")).rejects.toBeInstanceOf(WeatherApiError);
+  expect(called).toBe(false);
 });
 
 test("retries unavailable provider requests up to three times", async () => {
@@ -58,8 +57,8 @@ test("retries unavailable provider requests up to three times", async () => {
     },
   });
 
-  await assert.rejects(api.getWeather("63701"), /after three attempts/);
-  assert.equal(attempts, 3);
+  await expect(api.getWeather("63701")).rejects.toThrow(/after three attempts/);
+  expect(attempts).toBe(3);
 });
 
 test("does not retry a non-retryable API credential response", async () => {
@@ -72,6 +71,6 @@ test("does not retry a non-retryable API credential response", async () => {
     },
   });
 
-  await assert.rejects(api.getWeather("63701"), /Check the weather service configuration/);
-  assert.equal(attempts, 1);
+  await expect(api.getWeather("63701")).rejects.toThrow(/Check the weather service configuration/);
+  expect(attempts).toBe(1);
 });

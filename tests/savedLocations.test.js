@@ -1,5 +1,4 @@
-import test from "node:test";
-import assert from "node:assert/strict";
+import { expect, test } from "@jest/globals";
 import { addSavedLocation, readSavedLocations, removeSavedLocation } from "../src/services/savedLocations.js";
 
 function storageWith(initial = null) {
@@ -16,11 +15,11 @@ test("saves unique locations and enforces the five-location limit", () => {
   for (let index = 0; index < 5; index += 1) {
     const result = addSavedLocation({ zip: `0000${index}`, name: `Town ${index}` }, locations, storage);
     locations = result.locations;
-    assert.equal(result.saved, true);
+    expect(result.saved).toBe(true);
   }
 
-  assert.equal(addSavedLocation({ zip: "00000", name: "Town 0" }, locations, storage).saved, false);
-  assert.equal(addSavedLocation({ zip: "00005", name: "Town 5" }, locations, storage).limitReached, true);
-  assert.equal(readSavedLocations(storage).length, 5);
-  assert.equal(removeSavedLocation("00000", locations, storage).length, 4);
+  expect(addSavedLocation({ zip: "00000", name: "Town 0" }, locations, storage).saved).toBe(false);
+  expect(addSavedLocation({ zip: "00005", name: "Town 5" }, locations, storage).limitReached).toBe(true);
+  expect(readSavedLocations(storage)).toHaveLength(5);
+  expect(removeSavedLocation("00000", locations, storage)).toHaveLength(4);
 });

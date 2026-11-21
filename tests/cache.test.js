@@ -1,5 +1,4 @@
-import test from "node:test";
-import assert from "node:assert/strict";
+import { expect, test } from "@jest/globals";
 import {
   getCachedAirQuality,
   getCachedWeather,
@@ -24,8 +23,8 @@ test("reuses weather and air-quality cache entries younger than two hours", () =
   saveCachedWeather("63701", "metric", weather, now - 7_200_000 + 1, storage);
   saveCachedAirQuality("63701", airQuality, now - 7_200_000 + 1, storage);
 
-  assert.deepEqual(getCachedWeather("63701", "metric", now, storage).data, weather);
-  assert.deepEqual(getCachedAirQuality("63701", now, storage).data, airQuality);
+  expect(getCachedWeather("63701", "metric", now, storage).data).toEqual(weather);
+  expect(getCachedAirQuality("63701", now, storage).data).toEqual(airQuality);
 });
 
 test("expires cache entries at two hours and removes them from storage", () => {
@@ -34,16 +33,16 @@ test("expires cache entries at two hours and removes them from storage", () => {
   saveCachedWeather("63701", "metric", { current: {} }, now - 7_200_000, storage);
   saveCachedAirQuality("63701", { index: 1 }, now - 7_200_000, storage);
 
-  assert.equal(getCachedWeather("63701", "metric", now, storage), null);
-  assert.equal(getCachedAirQuality("63701", now, storage), null);
-  assert.equal(storage.getItem("atmosai-weather:63701:metric"), null);
-  assert.equal(storage.getItem("atmosai-air-quality:63701"), null);
+  expect(getCachedWeather("63701", "metric", now, storage)).toBeNull();
+  expect(getCachedAirQuality("63701", now, storage)).toBeNull();
+  expect(storage.getItem("atmosai-weather:63701:metric")).toBeNull();
+  expect(storage.getItem("atmosai-air-quality:63701")).toBeNull();
 });
 
 test("clears malformed cached JSON instead of treating it as valid weather", () => {
   const storage = createStorage();
   storage.setItem("atmosai-weather:63701:metric", "{");
 
-  assert.equal(getCachedWeather("63701", "metric", Date.now(), storage), null);
-  assert.equal(storage.getItem("atmosai-weather:63701:metric"), null);
+  expect(getCachedWeather("63701", "metric", Date.now(), storage)).toBeNull();
+  expect(storage.getItem("atmosai-weather:63701:metric")).toBeNull();
 });
