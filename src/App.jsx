@@ -18,9 +18,9 @@ const LAST_ZIP_KEY = "atmosai-last-zip";
 const SAVED_UNITS_KEY = "atmosai-units";
 
 function App() {
-  const [units, setUnits] = useState(() => localStorage.getItem(SAVED_UNITS_KEY) || "metric");
-  const [zip, setZip] = useState(() => localStorage.getItem(LAST_ZIP_KEY) || "");
-  const [zipDraft, setZipDraft] = useState(() => localStorage.getItem(LAST_ZIP_KEY) || "");
+  const [units, setUnits] = useState(() => localStorage.getItem(SAVED_UNITS_KEY) || "imperial");
+  const [zip, setZip] = useState(() => localStorage.getItem(LAST_ZIP_KEY) || "63701");
+  const [zipDraft, setZipDraft] = useState(() => localStorage.getItem(LAST_ZIP_KEY) || "63701");
   const [weather, setWeather] = useState(null);
   const [airQuality, setAirQuality] = useState(null);
   const [airQualityError, setAirQualityError] = useState("");
