@@ -21,4 +21,4 @@ The application is designed to allow the user to search for a location and see v
 The API key is read only by the Node server and is never placed in browser code. Do not commit credentials or paste them into chat. ZIP searches use US ZIP codes. Weather, geocoding, air-quality, and map requests require an OpenWeatherMap key with access to those endpoints/layers.
 
 Run `npm test` for the Jest test suites and `npm run build` for a production client build.
-Run 'npm test -- --coverage' to see the coverage of the tests
+Run `npm test -- --coverage` to see the coverage of the tests
